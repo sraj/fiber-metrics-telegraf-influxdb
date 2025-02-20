@@ -11,19 +11,6 @@ import (
 	"time"
 )
 
-func isPalindrome(s string) bool {
-	left := 0
-	right := len(s) - 1
-	for left < right {
-		if s[left] != s[right] {
-			return false
-		}
-		left++
-		right--
-	}
-	return true
-}
-
 var httpDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
 	Name:    "http_response_time_seconds",
 	Help:    "Duration of HTTP requests.",
@@ -50,11 +37,4 @@ func main() {
 	app.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 
 	log.Fatal(app.Listen(":3000"))
-
-	//str := []string{"RACEACAR", "A", "ABCDEFGFEDCBA", "ABC", "ABCBA", "ABBA", "RACEACAR"}
-	//for i, s := range str {
-	//	fmt.Printf("Checking on Index: %d value: %s\n", i, s)
-	//	fmt.Printf("Is it a palindrome?.....%v\n\n", isPalindrome(s))
-	//}
-
 }
