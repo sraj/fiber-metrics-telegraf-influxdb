@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: InfluxDB
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    basicAuth: true
+    basicAuthUser: "admin"	
+    isDefault: true
+    editable: true

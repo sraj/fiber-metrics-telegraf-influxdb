@@ -1,0 +1,68 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - go-modules:/go/pkg/mod
+    ports:
+      - "3000:3000"
+    environment:
+      - GO_ENV=development
+      - AIR_FORCE_BUILD=true
+    networks:
+      - monitoring
+
+  telegraf:
+    image: telegraf:1.28
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+      - app
+    networks:
+      - monitoring
+
+  influxdb:
+    image: influxdb:2.7
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword123
+      - DOCKER_INFLUXDB_INIT_ORG=myorg
+      - DOCKER_INFLUXDB_INIT_BUCKET=metrics
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    ports:
+      - "8086:8086"
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DATA_SOURCE_INFLUXDB_DATABASE=http://influxdb:8086
+      - GF_DATA_SOURCE_INFLUXDB_DATABASE=myorg
+    ports:
+      - "3030:3000"
+    depends_on:
+      - influxdb
+    networks:
+      - monitoring
+
+volumes:
+  influxdb_data:
+  grafana_data:
+  go-modules: # Volume for Go modules cache
+
+networks:
+  monitoring:
+    driver: bridge
