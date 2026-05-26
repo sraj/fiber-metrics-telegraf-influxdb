@@ -15,7 +15,7 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 tmp/
 
 # Go workspace file
@@ -24,3 +24,14 @@ go.work.sum
 
 # env file
 .env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Air
+build-errors.log
+
+# JetBrains (GoLand) specific ignores
+.idea/
+*.iml
