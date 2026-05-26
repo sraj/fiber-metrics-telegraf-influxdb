@@ -2,11 +2,32 @@ apiVersion: 1
 
 datasources:
   - name: InfluxDB
-    type: InfluxDB
+    uid: f41baf43-c338-4780-81d0-13e98f16cf02
+    type: influxdb
     access: proxy
     orgId: 1
     url: http://influxdb:8086
-    basicAuth: true
-    basicAuthUser: "admin"	
+    database: metrics
     isDefault: true
     editable: true
+    jsonData:
+      httpMode: GET
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: Token my-super-secret-auth-token
+
+  - name: InfluxDB Flux
+    uid: influxdb-flux-uid
+    type: influxdb
+    access: proxy
+    orgId: 1
+    url: http://influxdb:8086
+    isDefault: false
+    editable: true
+    jsonData:
+      version: Flux
+      organization: myorg
+      defaultBucket: metrics
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: Token my-super-secret-auth-token

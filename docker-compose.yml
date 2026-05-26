@@ -6,6 +6,7 @@ services:
     volumes:
       - .:/app
       - go-modules:/go/pkg/mod
+      - app-logs:/var/log/app
     ports:
       - "3000:3000"
     environment:
@@ -18,6 +19,7 @@ services:
     image: telegraf:1.28
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - app-logs:/var/log/app:ro
     depends_on:
       - influxdb
       - app
@@ -62,6 +64,7 @@ volumes:
   influxdb_data:
   grafana_data:
   go-modules: # Volume for Go modules cache
+  app-logs: # Shared volume for app logs
 
 networks:
   monitoring:

@@ -35,3 +35,6 @@ build-errors.log
 # JetBrains (GoLand) specific ignores
 .idea/
 *.iml
+
+# Build output
+/bin/
